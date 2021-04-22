@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema;
 
-const imageSchema = newSchema ({
+const imageSchema = new Schema ({
     imageUrl: { type: String}
 })
 
@@ -35,4 +35,6 @@ const postSchema = new Schema([
         show: { type: Boolean, default: true },
         status: { type: String, required: true },
     }
-])
+]);
+
+module.exports = mongoose.model('Post',postSchema);
