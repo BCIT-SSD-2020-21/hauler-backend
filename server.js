@@ -25,7 +25,7 @@ mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true, useCreat
 mongoose.connection
     .once('open', () => console.log('connected'))
     .on('error', (error) => {
-        console.log()
+        console.log(error.message)
     })
 
 
