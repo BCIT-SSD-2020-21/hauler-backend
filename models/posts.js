@@ -13,7 +13,7 @@ const postSchema = new Schema([
         postHeading: { type: String },
         postDescription: {type: String},
         loadWeight: {type: String},
-        numberOfItems: {type: String},
+        numberOfItems: {type: Number, default: 0},
         loadImages: [imageSchema],
         price: { type: Number, required: true, default: 50 },
         totalOffers: { type: Number, default: 0 }, //----confirm applicability?
