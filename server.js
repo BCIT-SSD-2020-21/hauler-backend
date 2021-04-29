@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const postRoutes = require('./routes/post-routes.js');
+const serviceProvidersRoutes = require('./routes/serviceProvider-router.js');
+
 
 require('dotenv').config();
 
@@ -16,6 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 
 app.use('/api/posts', postRoutes);
+app.use('/api/service-providers', serviceProvidersRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
