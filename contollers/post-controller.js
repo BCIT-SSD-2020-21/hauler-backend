@@ -1,4 +1,6 @@
 const PostData = require('../models/posts')
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 const getPosts = async (req, res) => {
    try {
@@ -8,6 +10,16 @@ const getPosts = async (req, res) => {
     res.status(404).json({ message: error.message });
    }
 };
+
+const getOnePost = async (req, res) => {
+    const postId = req.params._id;
+    try {
+        const post = await PostData.find(_id === ObjectId(postId));
+        res.status(200).json(post)
+   } catch (error) {
+    res.status(404).json({ message: error.message });
+   }
+ };
 
 const createPost = async (req, res) => {
     const {userId,
@@ -66,5 +78,7 @@ const createPost = async (req, res) => {
   
     }
 
+
 exports.getPosts = getPosts;
+exports.getOnePost = getOnePost;
 exports.createPost = createPost;
