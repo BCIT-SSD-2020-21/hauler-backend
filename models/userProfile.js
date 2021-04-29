@@ -3,20 +3,20 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const userProfileSchema = new Schema ({
-    firstName: {type: String, required: true},
-    lastName: {type: String, required: true},
+    firstName: {type: String},
+    lastName: {type: String},
     profilePicUrl: {type: String},
-    dateOfBirth: {type: Date, required: true },
-    province: {type: String, required: true},
-    city: {type: String, required: true},
-    streetAddress: {type: String, required: true },
+    dateOfBirth: {type: Date },
+    province: {type: String},
+    city: {type: String},
+    streetAddress: {type: String },
     unitNumber: {type: String},
-    email: {type: String, required: true},
-    contactNumber: {type: String, required: true},
-    creditCardNumber: {type: Number, required: true},
-    expiryDate: {type: Date, required: true},
-    cvv: {type: Number, required: true},
-    profileStatus: {type: Boolean, required: true}
+    email: {type: String},
+    contactNumber: {type: String},
+    creditCardNumber: {type: Number},
+    expiryDate: {type: Date},
+    cvv: {type: Number},
+    profileStatus: {type: Boolean}
 })
 
 module.exports = mongoose.model('UserRegistration', userProfileSchema);

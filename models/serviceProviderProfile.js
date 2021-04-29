@@ -3,33 +3,33 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const serviceLocationSchema = new Schema ({
-    serviceLocation: {type: String, required: true},
-    locationStatus: {type: Boolean, required: true}, 
+    serviceLocation: {type: String},
+    locationStatus: {type: Boolean}, 
 })
 
 const servicesProvidedSchema = new Schema ({
-    serviceProvided: {type: String, required: true},
-    serviceStatus: {type: Boolean, required: true},
+    serviceProvided: {type: String},
+    serviceStatus: {type: Boolean},
     serviceLocations: [serviceLocationSchema]
 })
 
 const serviceProviderProfileSchema = new Schema ({
-    firstName: {type: String, required: true},
-    lastName: {type: String, required: true},
+    firstName: {type: String},
+    lastName: {type: String},
     profilePicUrl: {type: String},
-    dateOfBirth: {type: Date, required: true },
-    province: {type: String, required: true},
-    city: {type: String, required: true},
-    streetAddress: {type: String, required: true },
+    dateOfBirth: {type: Date},
+    province: {type: String},
+    city: {type: String},
+    streetAddress: {type: String },
     unitNumber: {type: String},
-    email: {type: String, required: true},
-    contactNumber: {type: Number, required: true},
-    chequeDepositFormUrl: {type: String, required: true},
-    vehicleType: {type: String, required: true},
-    driverLicenseUrl: {type: String, required: true},
-    driverLicenseExpiry: {type: Date, required: true},
-    driverAbstractUrl: {type: String, required: true},
-    profileStatus: {type: Boolean, required: true},
+    email: {type: String},
+    contactNumber: {type: Number},
+    chequeDepositFormUrl: {type: String},
+    vehicleType: {type: String},
+    driverLicenseUrl: {type: String},
+    driverLicenseExpiry: {type: Date},
+    driverAbstractUrl: {type: String},
+    profileStatus: {type: Boolean},
     serviceProvided: [servicesProvidedSchema]
 })
 
