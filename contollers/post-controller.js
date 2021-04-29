@@ -1,4 +1,4 @@
-const PostData = require('../models/posts.js')
+const PostData = require('../models/posts')
 
 const getPosts = async (req, res) => {
    try {
@@ -10,16 +10,61 @@ const getPosts = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-    const postMessage = req.body;
-    const newPost = new PostData(postMessage);
+    const {userId,
+           service,
+           PostHeading,
+           postDescription,
+           loadWeight,
+           numberOfItems,
+           imageUrl,
+           price,
+           totalOffers,
+           status,
+           pickUpProvince,
+           pickUpCity,
+           pickUpStreetAddress,
+           pickUpZipCode,
+           pickUpContactPerson,
+           pickUpContactNumber,
+           pickUpSpecialInstruction,
+           dropOffProvince,
+           dropOffCity,
+           dropOffStreetAddress,
+           dropOffZipCode,
+           dropOffContactPerson,
+           dropOffContactNumber,
+           dropOffSpecialInstructions} = req.body;
 
-    try {
-            await newPost.save()
-            res.status(201).json(newPost);
-        } catch (error) {
-            res.status(409).json({ message: error.message });
+    const newPost = new PostData({
+        userId,
+        service,
+        PostHeading,
+        postDescription,
+        loadWeight,
+        numberOfItems,
+        loadImages: [{imageUrl}],
+        price,
+        totalOffers,
+        status,
+        pickUpProvince,
+        pickUpCity,
+        pickUpStreetAddress,
+        pickUpZipCode,
+        pickUpContactPerson,
+        pickUpContactNumber,
+        pickUpSpecialInstruction,
+        dropOffProvince,
+        dropOffCity,
+        dropOffStreetAddress,
+        dropOffZipCode,
+        dropOffContactPerson,
+        dropOffContactNumber,
+        dropOffSpecialInstructions});
+
+        await newPost.save();
+        res.status(201).json({posts: newPost});
+  
     }
-}
 
 exports.getPosts = getPosts;
 exports.createPost = createPost;
