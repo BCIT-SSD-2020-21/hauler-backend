@@ -10,6 +10,8 @@ const port = process.env.PORT || 5000;
 //importing routes
 const postRoutes = require('./routes/post-routes.js');
 const serviceProvidersRoutes = require('./routes/serviceProvider-router.js');
+const userRoutes = require('./routes/user-router.js');
+
 
 //importing middleware
 app.use(cors());
@@ -20,6 +22,7 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 //defining restApi's
 app.use('/api/posts', postRoutes);
 app.use('/api/service-providers', serviceProvidersRoutes);
+app.use('/api/users', userRoutes);
 
 
 //console logging port connection
