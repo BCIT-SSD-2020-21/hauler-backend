@@ -1,84 +1,277 @@
 const PostData = require('../models/posts')
-const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId;
 
-const getPosts = async (req, res) => {
-   try {
-        const posts = await PostData.find();
+//================================ Create new post on user app =====================================//
+const createPost = async (req, res) => {
+    try {
+        const {
+            userId,
+            service,
+            PostHeading,
+            postDescription,
+            loadWeight,
+            numberOfItems,
+            imageUrl,
+            price,
+            totalOffers,
+            status,
+            pickUpProvince,
+            pickUpCity,
+            pickUpStreetAddress,
+            pickUpZipCode,
+            pickUpContactPerson,
+            pickUpContactNumber,
+            pickUpSpecialInstruction,
+            dropOffProvince,
+            dropOffCity,
+            dropOffStreetAddress,
+            dropOffZipCode,
+            dropOffContactPerson,
+            dropOffContactNumber,
+            dropOffSpecialInstructions
+        } = req.body;
+
+        const newPost = new PostData({
+            userId,
+            service,
+            PostHeading,
+            postDescription,
+            loadWeight,
+            numberOfItems,
+            loadImages: [
+                { imageUrl }
+            ],
+            price,
+            totalOffers,
+            status,
+            pickUpProvince,
+            pickUpCity,
+            pickUpStreetAddress,
+            pickUpZipCode,
+            pickUpContactPerson,
+            pickUpContactNumber,
+            pickUpSpecialInstruction,
+            dropOffProvince,
+            dropOffCity,
+            dropOffStreetAddress,
+            dropOffZipCode,
+            dropOffContactPerson,
+            dropOffContactNumber,
+            dropOffSpecialInstructions
+        });
+        await newPost.save();
+        res.status(201).json({ posts: newPost });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+//=========================== To get all posts posted by user on user app ==========================//
+const getPostsByUid = async (req, res) => {
+    const id = req.params.uid;
+    try {
+        const posts = await PostData.find({ userId: id });
         res.status(200).json(posts)
-   } catch (error) {
-    res.status(404).json({ message: error.message });
-   }
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
 };
 
-const getOnePost = async (req, res) => {
-    const postId = req.params._id;
+//========================== To get user's posts by location on user app ===========================//
+const getPostsByIdAndLocation = async (req, res) => {
+    const id = req.params.uid;
+    const location = req.params.location;
     try {
-        const post = await PostData.find(_id === ObjectId(postId));
-        res.status(200).json(post)
-   } catch (error) {
-    res.status(404).json({ message: error.message });
-   }
- };
-
-const createPost = async (req, res) => {
-    const {userId,
-           service,
-           PostHeading,
-           postDescription,
-           loadWeight,
-           numberOfItems,
-           imageUrl,
-           price,
-           totalOffers,
-           status,
-           pickUpProvince,
-           pickUpCity,
-           pickUpStreetAddress,
-           pickUpZipCode,
-           pickUpContactPerson,
-           pickUpContactNumber,
-           pickUpSpecialInstruction,
-           dropOffProvince,
-           dropOffCity,
-           dropOffStreetAddress,
-           dropOffZipCode,
-           dropOffContactPerson,
-           dropOffContactNumber,
-           dropOffSpecialInstructions} = req.body;
-
-    const newPost = new PostData({
-        userId,
-        service,
-        PostHeading,
-        postDescription,
-        loadWeight,
-        numberOfItems,
-        loadImages: [{imageUrl}],
-        price,
-        totalOffers,
-        status,
-        pickUpProvince,
-        pickUpCity,
-        pickUpStreetAddress,
-        pickUpZipCode,
-        pickUpContactPerson,
-        pickUpContactNumber,
-        pickUpSpecialInstruction,
-        dropOffProvince,
-        dropOffCity,
-        dropOffStreetAddress,
-        dropOffZipCode,
-        dropOffContactPerson,
-        dropOffContactNumber,
-        dropOffSpecialInstructions});
-
-        await newPost.save();
-        res.status(201).json({posts: newPost});
-  
+        const posts = await PostData.find({ userId: id, pickUpCity: location });
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
     }
+};
 
+//========================= To get user's posts by service on user app ==============================//
+const getPostsByIdAndService = async (req, res) => {
+    const id = req.params.uid;
+    const service = req.params.service;
+    try {
+        const posts = await PostData.find({ userId: id, service: service });
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
 
-exports.getPosts = getPosts;
+//================================= Delete post on user app =========================================// 
+const deleteOnePost = async (req, res) => {
+    try {
+        const id = req.params.postId;
+        await PostData.deleteOne({ _id: id });
+        res.status(200).json("post deleted")
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//==================================== Edit post on user app ========================================//
+const updateOnePost = async (req, res) => {
+    try {
+        const id = req.params.postId;
+        const {
+            service,
+            PostHeading,
+            postDescription,
+            loadWeight,
+            numberOfItems,
+            imageUrl,
+            price,
+            totalOffers,
+            status,
+            pickUpProvince,
+            pickUpCity,
+            pickUpStreetAddress,
+            pickUpZipCode,
+            pickUpContactPerson,
+            pickUpContactNumber,
+            pickUpSpecialInstruction,
+            dropOffProvince,
+            dropOffCity,
+            dropOffStreetAddress,
+            dropOffZipCode,
+            dropOffContactPerson,
+            dropOffContactNumber,
+            dropOffSpecialInstructions
+        } = req.body;
+        await PostData.findOneAndUpdate({ _id: id },
+            {
+                $set: {
+                    service: service,
+                    PostHeading: PostHeading,
+                    postDescription: postDescription,
+                    loadWeight: loadWeight,
+                    numberOfItems: numberOfItems,
+                    imageUrl: imageUrl,
+                    price: price,
+                    totalOffers: totalOffers,
+                    status: status,
+                    pickUpProvince: pickUpProvince,
+                    pickUpCity: pickUpCity,
+                    pickUpStreetAddress: pickUpStreetAddress,
+                    pickUpZipCode: pickUpZipCode,
+                    pickUpContactPerson: pickUpContactPerson,
+                    pickUpContactNumber: pickUpContactNumber,
+                    pickUpSpecialInstruction: pickUpSpecialInstruction,
+                    dropOffProvince: dropOffProvince,
+                    dropOffCity: dropOffCity,
+                    dropOffStreetAddress: dropOffStreetAddress,
+                    dropOffZipCode: dropOffZipCode,
+                    dropOffContactPerson: dropOffContactPerson,
+                    dropOffContactNumber: dropOffContactNumber,
+                    dropOffSpecialInstructions: dropOffSpecialInstructions
+                }
+            });
+        res.status(200).json('Post updated')
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//================================ To change post visibilty on both apps =============================//
+const updatePostVisibility = async (req, res) => {
+    try {
+        const id = req.params.postId;
+        const {
+            show
+        } = req.body;
+        await PostData.findOneAndUpdate({ _id: id },
+            {
+                $set: {
+                    show: show
+                }
+            });
+        res.status(200).json('Visibility updated')
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//============================= To get single post by post Id on both apps ==========================//
+const getOnePost = async (req, res) => {
+    const postId = req.params.postId;
+    try {
+        const post = await PostData.findOne({ _id: postId });
+        res.status(200).json(post)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//======================== To get all Active posts on service provider app ==========================//
+const getAllPosts = async (req, res) => {
+    try {
+        const posts = await PostData.find({ show: true });
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//======================= To get Active posts by location on service provider app ====================//
+const getPostsByLocation = async (req, res) => {
+    const location = req.params.location;
+    try {
+        const posts = await PostData.find({ show: true, pickUpCity: location });
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//======================= To get Active Jobs by service on service provider app ======================//
+const getPostsByService = async (req, res) => {
+    const service = req.params.service;
+    try {
+        const posts = await PostData.find({ show: true, service: service });
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//====================== To get posts by postId and service on service provider app ==================//
+const getPostsByPostIdAndService = async (req, res) => {
+    const id = req.params.postid;
+    const service = req.params.service;
+    try {
+        const posts = await PostData.find({ _id: id, service: service });
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//====================== To get posts by postId and location on service provider app ================//
+const getPostsByPostIdAndLocation = async (req, res) => {
+    const id = req.params.postid;
+    const location = req.params.location;
+    try {
+        const posts = await PostData.find({ _id: id, pickUpCity: location });
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//===================================================================================================//
+exports.getAllPosts = getAllPosts;
+exports.getPostsByUid = getPostsByUid;
 exports.getOnePost = getOnePost;
 exports.createPost = createPost;
+exports.deleteOnePost = deleteOnePost;
+exports.updateOnePost = updateOnePost;
+exports.updatePostVisibility = updatePostVisibility;
+exports.getPostsByService = getPostsByService;
+exports.getPostsByLocation = getPostsByLocation;
+exports.getPostsByIdAndService = getPostsByIdAndService;
+exports.getPostsByIdAndLocation = getPostsByIdAndLocation;
+exports.getPostsByPostIdAndService = getPostsByPostIdAndService;
+exports.getPostsByPostIdAndLocation = getPostsByPostIdAndLocation;
+
