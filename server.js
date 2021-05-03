@@ -23,6 +23,7 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use('/api/posts', postRoutes);
 app.use('/api/service-providers', serviceProvidersRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/response', responseRoutes);
 
 
 //console logging port connection
