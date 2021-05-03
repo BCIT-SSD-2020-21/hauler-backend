@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema;
 
-const imageSchema = new Schema ({
-    imageUrl: { type: String}
+const imageSchema = new Schema({
+    imageUrl: { type: String }
 })
 
 const postSchema = new Schema([
@@ -11,11 +11,12 @@ const postSchema = new Schema([
         userId: { type: String },
         service: { type: String },
         postHeading: { type: String },
-        postDescription: {type: String},
-        loadWeight: {type: String},
-        numberOfItems: {type: Number, default: 0},
+        postDescription: { type: String },
+        loadWeight: { type: String },
+        numberOfItems: { type: Number, default: 0 },
         loadImages: [imageSchema],
         price: { type: Number, default: 50 },
+        timeStamp: {type: Date,required: true, default: Date.now},
         totalOffers: { type: Number, default: 0 }, //----confirm applicability?
         show: { type: Boolean, default: true },
         status: { type: String }, //---to be imported?
@@ -36,4 +37,4 @@ const postSchema = new Schema([
     }
 ]);
 
-module.exports = mongoose.model('Post',postSchema);
+module.exports = mongoose.model('Post', postSchema);
