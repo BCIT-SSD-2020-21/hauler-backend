@@ -6,7 +6,7 @@ const createPost = async (req, res) => {
         const {
             userId,
             service,
-            PostHeading,
+            postHeading,
             postDescription,
             loadWeight,
             numberOfItems,
@@ -33,7 +33,7 @@ const createPost = async (req, res) => {
         const newPost = new PostData({
             userId,
             service,
-            PostHeading,
+            postHeading,
             postDescription,
             loadWeight,
             numberOfItems,
@@ -236,24 +236,24 @@ const getPostsByService = async (req, res) => {
     }
 };
 
-//====================== To get posts by postId and service on service provider app ==================//
+//====================== To get post by postId and service on service provider app ==================//
 const getPostsByPostIdAndService = async (req, res) => {
-    const id = req.params.postid;
+    const id = req.params.postId;
     const service = req.params.service;
     try {
-        const posts = await PostData.find({ _id: id, service: service });
+        const posts = await PostData.findOne({ _id: id, service: service });
         res.status(200).json(posts)
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
 };
 
-//====================== To get posts by postId and location on service provider app ================//
+//====================== To get post by postId and location on service provider app ================//
 const getPostsByPostIdAndLocation = async (req, res) => {
-    const id = req.params.postid;
+    const id = req.params.postId;
     const location = req.params.location;
     try {
-        const posts = await PostData.find({ _id: id, pickUpCity: location });
+        const posts = await PostData.findOne({ _id: id, pickUpCity: location });
         res.status(200).json(posts)
     } catch (error) {
         res.status(404).json({ message: error.message });
