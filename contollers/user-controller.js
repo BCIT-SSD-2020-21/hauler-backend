@@ -4,6 +4,7 @@ const UserData = require('../models/userProfile.js')
 const createUser = async (req, res) => {
     try {
         const {
+            uid,
             firstName,
             lastName,
             profilePicUrl,
@@ -16,10 +17,11 @@ const createUser = async (req, res) => {
             contactNumber,
             creditCardNumber,
             expiryDate,
-            cvv,
-            profileStatus } = req.body;
+            cvv 
+        } = req.body;
 
         const newUser = new UserData({
+            uid,
             firstName,
             lastName,
             profilePicUrl,
@@ -32,8 +34,7 @@ const createUser = async (req, res) => {
             contactNumber,
             creditCardNumber,
             expiryDate,
-            cvv,
-            profileStatus
+            cvv
         });
 
         await newUser.save();

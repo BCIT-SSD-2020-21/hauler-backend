@@ -16,7 +16,7 @@ const addServiceProviserResponse = async (req, res) => {
         userActionButtons
     } = req.body;
 
-    let existedResponse = await Response.find({ postId: postId, serviceProviderId: serviceProviderId })
+    let existedResponse = await Response.findOne({ postId: postId, serviceProviderId: serviceProviderId })
 
     if (existedResponse.length > 0) {
         try {
@@ -73,9 +73,9 @@ const addServiceProviserResponse = async (req, res) => {
 
 //========== To get all response on posts related to service provider for service provider app =======//
 const getResponseByServiseProviderId = async (req, res) => {
-    const servideProviderId = req.params.service - provider - id;
+    const servideProviderId = req.params.serviceProviderId;
     try {
-        const response = await Response.find({ serviceProviderId: servideProviderId });
+        const response = await Response.findOne({ serviceProviderId: servideProviderId });
         res.status(200).json(response)
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -97,9 +97,9 @@ const deleteResponse = async (req, res) => {
 //=============================== To get single response for both apps ===============================// 
 const getOneResponse = async (req, res) => {
     const id = req.params.postId;
-    const servideProviderId = req.params.service - provider - id;
+    const servideProviderId = req.params.serviceProviderId;
     try {
-        const response = await Response.find({ postId: id, serviceProviderId: servideProviderId });
+        const response = await Response.findOne({ postId: id, serviceProviderId: servideProviderId });
         res.status(200).json(response)
     } catch (error) {
         res.status(404).json({ message: error.message });
