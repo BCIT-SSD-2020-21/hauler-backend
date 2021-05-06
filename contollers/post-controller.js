@@ -402,6 +402,23 @@ const addUserResponse = async (req, res) => {
     }
 }
 
+//=================== To get respone by serviceProviderId on serviceProvider App =====================//
+const getResponseByServiseProviderId = async (req, res) => {
+    try {
+        const id = req.params.postId;
+        const serviceProviderId = req.params.serviceProviderId;
+        let newResponse = await PostData.aggregate([
+            { $match: { _id: ObjectId(id), } },
+            { $unwind: "$response" },
+            { $replaceRoot: { newRoot: "$response" } },
+            { $match: { serviceProviderId: serviceProviderId } },
+        ]);
+        res.status(200).json(newResponse)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 //===================================================================================================//
 exports.getAllPosts = getAllPosts;
 exports.getPostsByUid = getPostsByUid;
@@ -418,3 +435,4 @@ exports.getPostsByIdAndLocation = getPostsByIdAndLocation;
 // exports.getPostsByPostIdAndLocation = getPostsByPostIdAndLocation;
 exports.addServiceProviserResponse = addServiceProviserResponse;
 exports.addUserResponse = addUserResponse;
+exports.getResponseByServiseProviderId = getResponseByServiseProviderId;
