@@ -1,4 +1,6 @@
 const PostData = require('../models/posts')
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 //================================ Create new post on user app =====================================//
 const createPost = async (req, res) => {
@@ -92,6 +94,7 @@ const createPost = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
+
 //=========================== To get all posts posted by user on user app ==========================//
 const getPostsByUid = async (req, res) => {
     const id = req.params.uid;
@@ -263,31 +266,43 @@ const getPostsByService = async (req, res) => {
     }
 };
 
-//====================== To get post by postId and service on service provider app ==================//
-// const getPostsByPostIdAndService = async (req, res) => {
-//     const id = req.params.postId;
-//     const service = req.params.service;
-//     try {
-//         const posts = await PostData.findOne({ _id: id, service: service });
-//         res.status(200).json(posts)
-//     } catch (error) {
-//         res.status(404).json({ message: error.message });
-//     }
-// };
+//=========================== To get all post by serviceProviderId ===================================//
+const getPostsByServiceProviderId = async (req, res) => {
+    try {
+        const serviceProviderId = req.params.serviceProviderId;
+        posts = await PostData.find({ 'response.serviceProviderId': serviceProviderId })
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
 
-//====================== To get post by postId and location on service provider app ================//
-// const getPostsByPostIdAndLocation = async (req, res) => {
-//     const id = req.params.postId;
-//     const location = req.params.location;
-//     try {
-//         const posts = await PostData.findOne({ _id: id, pickUpCity: location });
-//         res.status(200).json(posts)
-//     } catch (error) {
-//         res.status(404).json({ message: error.message });
-//     }
-// };
+//=================== To get all post by serviceProviderId and service ==============================//
+const getPostsByServiceProviderAndService = async (req, res) => {
+    try {
+        const service = req.params.service
+        const serviceProviderId = req.params.serviceProviderId;
+        posts = await PostData.find({ 'response.serviceProviderId': serviceProviderId, service: service })
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+//=================== To get all post by serviceProviderId and location ==============================//
+const getPostsByServiceProviderIdAndLocation = async (req, res) => {
+    try {
+        const location = req.params.location
+        const serviceProviderId = req.params.serviceProviderId;
+        posts = await PostData.find({ 'response.serviceProviderId': serviceProviderId, pickUpCity: location })
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
 
 //==================== To add service provider response on service provider app ======================//
+
 const addServiceProviserResponse = async (req, res) => {
     const {
         postId,
@@ -442,9 +457,11 @@ exports.getPostsByService = getPostsByService;
 exports.getPostsByLocation = getPostsByLocation;
 exports.getPostsByIdAndService = getPostsByIdAndService;
 exports.getPostsByIdAndLocation = getPostsByIdAndLocation;
-// exports.getPostsByPostIdAndService = getPostsByPostIdAndService;
-// exports.getPostsByPostIdAndLocation = getPostsByPostIdAndLocation;
 exports.addServiceProviserResponse = addServiceProviserResponse;
 exports.addUserResponse = addUserResponse;
 exports.getResponseByServiseProviderId = getResponseByServiseProviderId;
 exports.deleteResponse = deleteResponse;
+exports.getPostsByServiceProviderId = getPostsByServiceProviderId;
+exports.getPostsByServiceProviderAndService = getPostsByServiceProviderAndService;
+exports.getPostsByServiceProviderIdAndLocation = getPostsByServiceProviderIdAndLocation;
+
