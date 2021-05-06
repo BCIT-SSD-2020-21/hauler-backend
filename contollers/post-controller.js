@@ -27,7 +27,18 @@ const createPost = async (req, res) => {
             dropOffZipCode,
             dropOffContactPerson,
             dropOffContactNumber,
-            dropOffSpecialInstructions
+            dropOffSpecialInstructions,
+            serviceProviderId,
+            originalPrice,
+            responseStatus,
+            notificationOnServiceProvider,
+            notificationOnUser,
+            serviceProviderActionButtons,
+            userActionButtons,
+            serviceProviderResponse,
+            serviceProviderActionPrice,
+            userResponse,
+            userResponsePrice,
         } = req.body;
 
         const newPost = new PostData({
@@ -56,7 +67,24 @@ const createPost = async (req, res) => {
             dropOffZipCode,
             dropOffContactPerson,
             dropOffContactNumber,
-            dropOffSpecialInstructions
+            dropOffSpecialInstructions,
+            response: [{
+                serviceProviderId,
+                originalPrice,
+                responseStatus,
+                notificationOnServiceProvider,
+                notificationOnUser,
+                serviceProviderActionButtons,
+                userActionButtons,
+                serviceProviderResponseSchema: [{
+                    serviceProviderResponse,
+                    serviceProviderActionPrice
+                }],
+                userResponseSchema: [{
+                    userResponse,
+                    userResponsePrice
+                }]
+            }]
         });
         await newPost.save();
         res.status(201).json({ posts: newPost });
@@ -64,7 +92,6 @@ const createPost = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
-
 //=========================== To get all posts posted by user on user app ==========================//
 const getPostsByUid = async (req, res) => {
     const id = req.params.uid;
