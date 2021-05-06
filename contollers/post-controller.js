@@ -363,6 +363,45 @@ const addServiceProviserResponse = async (req, res) => {
     }
 };
 
+//================================= To add user response on user app ================================//
+const addUserResponse = async (req, res) => {
+    try {
+        const {
+            postId,
+            serviceProviderId,
+            responseStatus,
+            // notificationOnServiceProvider,
+            // notificationOnUser,
+            serviceProviderActionButtons,
+            userResponse,
+            userResponsePrice,
+            userActionButtons
+        } = req.body
+
+        const updatedResponse = await PostData.updateOne(
+            { _id: postId, 'response.serviceProviderId': serviceProviderId }, {
+            $push: {
+                'response.$.userResponseSchema': [{
+                    userResponse,
+                    userResponsePrice
+                }
+                ]
+            },
+            $set: {
+                'response.$.responseStatus': responseStatus,
+                'response.$.serviceProviderActionButtons': serviceProviderActionButtons,
+                'response.$.notificationOnServiceProvider': 'flex',
+                'response.$.notificationOnUser': 'none',
+                'response.$.userActionButtons': userActionButtons
+            }
+        }
+        )
+        res.status(200).json(updatedResponse);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 //===================================================================================================//
 exports.getAllPosts = getAllPosts;
 exports.getPostsByUid = getPostsByUid;
@@ -378,4 +417,4 @@ exports.getPostsByIdAndLocation = getPostsByIdAndLocation;
 // exports.getPostsByPostIdAndService = getPostsByPostIdAndService;
 // exports.getPostsByPostIdAndLocation = getPostsByPostIdAndLocation;
 exports.addServiceProviserResponse = addServiceProviserResponse;
-
+exports.addUserResponse = addUserResponse;

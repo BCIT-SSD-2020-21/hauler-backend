@@ -16,6 +16,7 @@ router.delete('/:postId', postController.deleteOnePost);
 router.post('/:postId', postController.updateOnePost)
 router.post('/one/:postId', postController.updatePostVisibility)
 router.post('/response/service-provider', postController.addServiceProviserResponse);
+router.post('/response/user', postController.addUserResponse) 
 
 module.exports = router;
 
