@@ -297,6 +297,17 @@ const getPostsByServiceProviderId = async (req, res) => {
     }
 }
 
+//=================== To get all post by serviceProviderId and service ==============================//
+const getPostsByServiceProviderAndService = async (req, res) => {
+    try {
+        const service = req.params.service
+        const serviceProviderId = req.params.serviceProviderId;
+        posts= await PostData.find({'response.serviceProviderId':serviceProviderId, service: service})
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
 //==================== To add service provider response on service provider app ======================//
 const addServiceProviserResponse = async (req, res) => {
     const {
@@ -459,3 +470,4 @@ exports.addUserResponse = addUserResponse;
 exports.getResponseByServiseProviderId = getResponseByServiseProviderId;
 exports.deleteResponse = deleteResponse;
 exports.getPostsByServiceProviderId = getPostsByServiceProviderId;
+exports.getPostsByServiceProviderAndService = getPostsByServiceProviderAndService;
