@@ -264,26 +264,102 @@ const getPostsByService = async (req, res) => {
 };
 
 //====================== To get post by postId and service on service provider app ==================//
-const getPostsByPostIdAndService = async (req, res) => {
-    const id = req.params.postId;
-    const service = req.params.service;
-    try {
-        const posts = await PostData.findOne({ _id: id, service: service });
-        res.status(200).json(posts)
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
-};
+// const getPostsByPostIdAndService = async (req, res) => {
+//     const id = req.params.postId;
+//     const service = req.params.service;
+//     try {
+//         const posts = await PostData.findOne({ _id: id, service: service });
+//         res.status(200).json(posts)
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//     }
+// };
 
 //====================== To get post by postId and location on service provider app ================//
-const getPostsByPostIdAndLocation = async (req, res) => {
-    const id = req.params.postId;
-    const location = req.params.location;
-    try {
-        const posts = await PostData.findOne({ _id: id, pickUpCity: location });
-        res.status(200).json(posts)
-    } catch (error) {
-        res.status(404).json({ message: error.message });
+// const getPostsByPostIdAndLocation = async (req, res) => {
+//     const id = req.params.postId;
+//     const location = req.params.location;
+//     try {
+//         const posts = await PostData.findOne({ _id: id, pickUpCity: location });
+//         res.status(200).json(posts)
+//     } catch (error) {
+//         res.status(404).json({ message: error.message });
+//     }
+// };
+
+//==================== To add service provider response on service provider app ======================//
+const addServiceProviserResponse = async (req, res) => {
+    const {
+        postId,
+        serviceProviderId,
+        originalPrice,
+        responseStatus,
+        // notificationOnServiceProvider,
+        // notificationOnUser,
+        serviceProviderActionButtons,
+        serviceProviderResponse,
+        serviceProviderActionPrice,
+        userActionButtons
+    } = req.body;
+
+    let existedResponse = await PostData.aggregate([
+        { $match: { _id: ObjectId(postId), } },
+        { $unwind: "$response" },
+        { $replaceRoot: { newRoot: "$response" } },
+        { $match: { serviceProviderId: serviceProviderId } },
+    ]);
+
+    if (existedResponse.length > 0) {
+        try {
+            const updatedResponse = await PostData.updateOne(
+                { _id: postId, 'response.serviceProviderId': serviceProviderId }, {
+                $push: {
+                    'response.$.serviceProviderResponseSchema': [{
+                        serviceProviderResponse,
+                        serviceProviderActionPrice
+                    }
+                    ]
+                },
+                $set: {
+                    'response.$.responseStatus': responseStatus,
+                    'response.$.serviceProviderActionButtons': serviceProviderActionButtons,
+                    'response.$.notificationOnServiceProvider': 'none',
+                    'response.$.notificationOnUser': 'flex',
+                    'response.$.userActionButtons': userActionButtons
+                }
+            }
+            )
+            res.status(200).json(updatedResponse);
+        } catch (error) {
+            res.status(404).json({ message: error.message });
+        }
+    }
+
+    else {
+        try {
+            const newResponse = await PostData.updateOne({ _id: postId },
+                {
+                    $push: {
+                        response:
+                            [{
+                                serviceProviderId: serviceProviderId,
+                                originalPrice: originalPrice,
+                                responseStatus: responseStatus,
+                                notificationOnServiceProvider: 'none',
+                                notificationOnUser: 'flex',
+                                serviceProviderActionButtons: serviceProviderActionButtons,
+                                userActionButtons: userActionButtons,
+                                serviceProviderResponseSchema: [{
+                                    serviceProviderResponse: serviceProviderResponse,
+                                    serviceProviderActionPrice: serviceProviderActionPrice,
+                                }],
+                            }]
+                    }
+                })
+            res.status(200).json(newResponse)
+        } catch (error) {
+            res.status(404).json({ message: error.message });
+        }
     }
 };
 
@@ -299,6 +375,7 @@ exports.getPostsByService = getPostsByService;
 exports.getPostsByLocation = getPostsByLocation;
 exports.getPostsByIdAndService = getPostsByIdAndService;
 exports.getPostsByIdAndLocation = getPostsByIdAndLocation;
-exports.getPostsByPostIdAndService = getPostsByPostIdAndService;
-exports.getPostsByPostIdAndLocation = getPostsByPostIdAndLocation;
+// exports.getPostsByPostIdAndService = getPostsByPostIdAndService;
+// exports.getPostsByPostIdAndLocation = getPostsByPostIdAndLocation;
+exports.addServiceProviserResponse = addServiceProviserResponse;
 
