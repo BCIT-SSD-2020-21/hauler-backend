@@ -419,6 +419,17 @@ const getResponseByServiseProviderId = async (req, res) => {
     }
 }
 
+//================================= To Delete Response on both apps====================================//
+const deleteResponse = async (req, res, next) => {
+    try {
+        const responseId = req.params.responseId;
+        await PostData.update({}, { $pull: { response: { _id: ObjectId(responseId) } } }, { multi: true })
+        res.status(201).json({ "item deleted": 1 })
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
 //===================================================================================================//
 exports.getAllPosts = getAllPosts;
 exports.getPostsByUid = getPostsByUid;
@@ -436,3 +447,4 @@ exports.getPostsByIdAndLocation = getPostsByIdAndLocation;
 exports.addServiceProviserResponse = addServiceProviserResponse;
 exports.addUserResponse = addUserResponse;
 exports.getResponseByServiseProviderId = getResponseByServiseProviderId;
+exports.deleteResponse = deleteResponse;

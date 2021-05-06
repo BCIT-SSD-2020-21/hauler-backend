@@ -18,6 +18,7 @@ router.post('/one/:postId', postController.updatePostVisibility)
 router.post('/response/service-provider', postController.addServiceProviserResponse);
 router.post('/response/user', postController.addUserResponse) 
 router.get('/response/service-provider/:serviceProviderId/:postId', postController.getResponseByServiseProviderId)
+router.delete('/response/:responseId', postController.deleteResponse)
 
 module.exports = router;
 
