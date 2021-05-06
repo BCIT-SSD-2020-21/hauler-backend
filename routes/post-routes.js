@@ -19,6 +19,7 @@ router.post('/response/service-provider', postController.addServiceProviserRespo
 router.post('/response/user', postController.addUserResponse) 
 router.get('/response/service-provider/:serviceProviderId/:postId', postController.getResponseByServiseProviderId)
 router.delete('/response/:responseId', postController.deleteResponse)
+router.get('/serviceprovider/:serviceProviderId', postController.getPostsByServiceProviderId)
 
 module.exports = router;
 
