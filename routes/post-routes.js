@@ -21,6 +21,7 @@ router.get('/response/service-provider/:serviceProviderId/:postId', postControll
 router.delete('/response/:responseId', postController.deleteResponse)
 router.get('/serviceprovider/:serviceProviderId', postController.getPostsByServiceProviderId)
 router.get('/serviceprovider/service/:serviceProviderId/:service', postController.getPostsByServiceProviderAndService)
+router.get('/serviceprovider/location/:serviceProviderId/:location', postController.getPostsByServiceProviderIdAndLocation)
 
 module.exports = router;
 
