@@ -16,7 +16,7 @@ const createServiceProvider = async (req, res) => {
             email,
             contactNumber,
             chequeDepositFormUrl,
-            vehicleType,
+            vehicle,
             driverLicenseUrl,
             driverLicenseExpiry,
             driverAbstractUrl,
@@ -24,7 +24,7 @@ const createServiceProvider = async (req, res) => {
             serviceProvided,
             serviceStatus,
             serviceLocation,
-            locationStatus 
+            locationStatus
         } = req.body;
 
         const newServiceProvider = new ServiceProviderData({
@@ -40,7 +40,9 @@ const createServiceProvider = async (req, res) => {
             email,
             contactNumber,
             chequeDepositFormUrl,
-            vehicleType,
+            vehicleType: {
+                vehicle
+            },
             driverLicenseUrl,
             driverLicenseExpiry,
             driverAbstractUrl,
@@ -48,11 +50,11 @@ const createServiceProvider = async (req, res) => {
             serviceProvided: {
                 serviceProvided,
                 serviceStatus,
+                serviceLocations: {
+                    serviceLocation,
+                    locationStatus,
+                }
             },
-            serviceLocations: {
-                serviceLocation,
-                locationStatus,
-            }
         });
         await newServiceProvider.save();
         res.status(201).json({ serviceProviderProfile: newServiceProvider });
@@ -75,7 +77,7 @@ const getServiceProvider = async (req, res) => {
 const getOneServiceProvider = async (req, res) => {
     try {
         const id = req.params.uid;
-        let serviceProvider = await ServiceProviderData.findOne({ _id: id });
+        let serviceProvider = await ServiceProviderData.findOne({ uid: id });
         res.status(200).json(serviceProvider)
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -87,7 +89,7 @@ const deleteOneServiceProvider = async (req, res) => {
     try {
         const id = req.params.uid;
         await ServiceProviderData.deleteOne({ _id: id });
-        res.status(200).json("Service Proviser Deleted")
+        res.status(200).json('Service Proviser Deleted')
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -100,22 +102,28 @@ const updateOneServiceProvider = async (req, res) => {
         const {
             firstName,
             lastName,
+            profilePicUrl,
             dateOfBirth,
             province,
             city,
             streetAddress,
             unitNumber,
             contactNumber,
-            vehicleType
         } = req.body;
-        await ServiceProviderData.findOneAndUpdate({ _id: id }, {
+        await ServiceProviderData.findOneAndUpdate({ uid: id }, {
             $set: {
-                firstName: firstName, lastName: lastName,
-                dateOfBirth: dateOfBirth, province: province, city: city, streetAddress: streetAddress,
-                unitNumber: unitNumber, contactNumber: contactNumber, vehicleType: vehicleType
+                firstName: firstName,
+                lastName: lastName,
+                dateOfBirth: dateOfBirth,
+                province: province,
+                city: city,
+                streetAddress: streetAddress,
+                unitNumber: unitNumber,
+                contactNumber: contactNumber,
+                profilePicUrl: profilePicUrl
             }
         });
-        res.status(200).json("User Info updated")
+        res.status(200).json('User Info updated')
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -126,5 +134,3 @@ exports.getServiceProvider = getServiceProvider;
 exports.createServiceProvider = createServiceProvider;
 exports.deleteOneServiceProvider = deleteOneServiceProvider;
 exports.updateOneServiceProvider = updateOneServiceProvider;
-
-
