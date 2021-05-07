@@ -2,6 +2,8 @@ const express = require('express');
 const postController = require('../contollers/post-controller.js');
 const router = express.Router();
 
+router.delete ('/', postController.deleteAll)
+router.get('/',postController.getAll)
 router.get('/all', postController.getAllPosts );
 router.get('/location/:location',postController.getPostsByLocation)
 router.get('/service/:service',postController.getPostsByService)
