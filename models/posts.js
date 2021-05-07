@@ -20,7 +20,6 @@ const userResponseSchema = new Schema({
 
 const responseSchema = new Schema({
     serviceProviderId: { type: String },
-    originalPrice: { type: Number },
     responseStatus: { type: String },
     notificationOnServiceProvider: { type: String, default: 'none' },
     notificationOnUser: { type: String, default: 'none' },
@@ -45,6 +44,7 @@ const postSchema = new Schema([
         totalOffers: { type: Number, default: 0 },
         show: { type: Boolean, default: true },
         status: { type: String, default: "Active" },
+        acceptedPrice: { type: Number },
         pickUpProvince: { type: String, required: true },
         pickUpCity: { type: String, required: true },
         pickUpStreetAddress: { type: String, required: true },

@@ -31,7 +31,6 @@ const createPost = async (req, res) => {
             dropOffContactNumber,
             dropOffSpecialInstructions,
             serviceProviderId,
-            originalPrice,
             responseStatus,
             notificationOnServiceProvider,
             notificationOnUser,
@@ -72,7 +71,6 @@ const createPost = async (req, res) => {
             dropOffSpecialInstructions,
             response: [{
                 serviceProviderId,
-                originalPrice,
                 responseStatus,
                 notificationOnServiceProvider,
                 notificationOnUser,
@@ -307,7 +305,6 @@ const addServiceProviserResponse = async (req, res) => {
     const {
         postId,
         serviceProviderId,
-        originalPrice,
         responseStatus,
         // notificationOnServiceProvider,
         // notificationOnUser,
@@ -317,29 +314,104 @@ const addServiceProviserResponse = async (req, res) => {
         userActionButtons
     } = req.body;
 
-    let existedResponse = await PostData.aggregate([
-        { $match: { _id: ObjectId(postId), } },
-        { $unwind: "$response" },
-        { $replaceRoot: { newRoot: "$response" } },
-        { $match: { serviceProviderId: serviceProviderId } },
-    ]);
+    let activePost = await PostData.findOne({ _id: postId, status: 'Active' })
+    if (!!activePost) {
+        console.log(activePost)
+        let existedResponse = await PostData.aggregate([
+            { $match: { _id: ObjectId(postId), } },
+            { $unwind: "$response" },
+            { $replaceRoot: { newRoot: "$response" } },
+            { $match: { serviceProviderId: serviceProviderId } },
+        ]);
 
-    if (existedResponse.length > 0) {
+        if (existedResponse.length > 0) {
+            try {
+                const updatedResponse = await PostData.updateOne(
+                    { _id: postId, 'response.serviceProviderId': serviceProviderId }, {
+                    $push: {
+                        'response.$.serviceProviderResponseSchema': [{
+                            serviceProviderResponse,
+                            serviceProviderActionPrice
+                        }
+                        ]
+                    },
+                    $set: {
+                        'response.$.responseStatus': responseStatus,
+                        'response.$.serviceProviderActionButtons': serviceProviderActionButtons,
+                        'response.$.notificationOnServiceProvider': 'none',
+                        'response.$.notificationOnUser': 'flex',
+                        'response.$.userActionButtons': userActionButtons
+                    }
+                }
+                )
+                res.status(200).json("Response sent");
+            } catch (error) {
+                res.status(404).json({ message: error.message });
+            }
+        }
+
+        else {
+            try {
+                const newResponse = await PostData.updateOne({ _id: postId },
+                    {
+                        $push: {
+                            response:
+                                [{
+                                    serviceProviderId: serviceProviderId,
+                                    responseStatus: responseStatus,
+                                    notificationOnServiceProvider: 'none',
+                                    notificationOnUser: 'flex',
+                                    serviceProviderActionButtons: serviceProviderActionButtons,
+                                    userActionButtons: userActionButtons,
+                                    serviceProviderResponseSchema: [{
+                                        serviceProviderResponse: serviceProviderResponse,
+                                        serviceProviderActionPrice: serviceProviderActionPrice,
+                                    }],
+                                }]
+                        }
+                    })
+                res.status(200).json("Response sent")
+            } catch (error) {
+                res.status(404).json({ message: error.message });
+            }
+        }
+    } else {
+        res.status(200).json("This post is not available")
+    }
+};
+
+//================================= To add user response on user app ================================//
+const addUserResponse = async (req, res) => {
+
+
+    const {
+        postId,
+        serviceProviderId,
+        responseStatus,
+        // notificationOnServiceProvider,
+        // notificationOnUser,
+        serviceProviderActionButtons,
+        userResponse,
+        userResponsePrice,
+        userActionButtons
+    } = req.body
+    let activePost = await PostData.findOne({ _id: postId, status: 'Active' })
+    if (!!activePost) {
         try {
             const updatedResponse = await PostData.updateOne(
                 { _id: postId, 'response.serviceProviderId': serviceProviderId }, {
                 $push: {
-                    'response.$.serviceProviderResponseSchema': [{
-                        serviceProviderResponse,
-                        serviceProviderActionPrice
+                    'response.$.userResponseSchema': [{
+                        userResponse,
+                        userResponsePrice
                     }
                     ]
                 },
                 $set: {
                     'response.$.responseStatus': responseStatus,
                     'response.$.serviceProviderActionButtons': serviceProviderActionButtons,
-                    'response.$.notificationOnServiceProvider': 'none',
-                    'response.$.notificationOnUser': 'flex',
+                    'response.$.notificationOnServiceProvider': 'flex',
+                    'response.$.notificationOnUser': 'none',
                     'response.$.userActionButtons': userActionButtons
                 }
             }
@@ -348,72 +420,8 @@ const addServiceProviserResponse = async (req, res) => {
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
-    }
-
-    else {
-        try {
-            const newResponse = await PostData.updateOne({ _id: postId },
-                {
-                    $push: {
-                        response:
-                            [{
-                                serviceProviderId: serviceProviderId,
-                                originalPrice: originalPrice,
-                                responseStatus: responseStatus,
-                                notificationOnServiceProvider: 'none',
-                                notificationOnUser: 'flex',
-                                serviceProviderActionButtons: serviceProviderActionButtons,
-                                userActionButtons: userActionButtons,
-                                serviceProviderResponseSchema: [{
-                                    serviceProviderResponse: serviceProviderResponse,
-                                    serviceProviderActionPrice: serviceProviderActionPrice,
-                                }],
-                            }]
-                    }
-                })
-            res.status(200).json(newResponse)
-        } catch (error) {
-            res.status(404).json({ message: error.message });
-        }
-    }
-};
-
-//================================= To add user response on user app ================================//
-const addUserResponse = async (req, res) => {
-    try {
-        const {
-            postId,
-            serviceProviderId,
-            responseStatus,
-            // notificationOnServiceProvider,
-            // notificationOnUser,
-            serviceProviderActionButtons,
-            userResponse,
-            userResponsePrice,
-            userActionButtons
-        } = req.body
-
-        const updatedResponse = await PostData.updateOne(
-            { _id: postId, 'response.serviceProviderId': serviceProviderId }, {
-            $push: {
-                'response.$.userResponseSchema': [{
-                    userResponse,
-                    userResponsePrice
-                }
-                ]
-            },
-            $set: {
-                'response.$.responseStatus': responseStatus,
-                'response.$.serviceProviderActionButtons': serviceProviderActionButtons,
-                'response.$.notificationOnServiceProvider': 'flex',
-                'response.$.notificationOnUser': 'none',
-                'response.$.userActionButtons': userActionButtons
-            }
-        }
-        )
-        res.status(200).json(updatedResponse);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
+    } else {
+        res.status(200).json("This post is not available")
     }
 }
 
