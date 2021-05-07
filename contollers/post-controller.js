@@ -93,6 +93,26 @@ const createPost = async (req, res) => {
     }
 }
 
+//=============================get all posts for testing ===========================================//
+const getAll = async (req, res) => {
+    try {
+        const posts = await PostData.find();
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+//=============================delete all posts for testing ===========================================//
+const deleteAll = async (req, res) => {
+    try {
+        const posts = await PostData.deleteMany();
+        res.status(200).json('all posts deleted')
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
 //=========================== To get all posts posted by user on user app ==========================//
 const getPostsByUid = async (req, res) => {
     const id = req.params.uid;
@@ -206,13 +226,15 @@ const updateOnePost = async (req, res) => {
 const updatePostVisibility = async (req, res) => {
     try {
         const id = req.params.postId;
-        const {
-            show
+        const { 
+            price
         } = req.body;
         await PostData.findOneAndUpdate({ _id: id },
             {
                 $set: {
-                    show: show
+                    show: false,
+                    status: "In Progress",
+                    acceptedPrice: price
                 }
             });
         res.status(200).json('Visibility updated')
@@ -472,4 +494,6 @@ exports.deleteResponse = deleteResponse;
 exports.getPostsByServiceProviderId = getPostsByServiceProviderId;
 exports.getPostsByServiceProviderAndService = getPostsByServiceProviderAndService;
 exports.getPostsByServiceProviderIdAndLocation = getPostsByServiceProviderIdAndLocation;
+exports.getAll = getAll;
+exports.deleteAll = deleteAll;
 
