@@ -386,6 +386,9 @@ const addServiceProviserResponse = async (req, res) => {
                         'response.$.notificationOnServiceProvider': 'none',
                         'response.$.notificationOnUser': 'flex',
                         'response.$.userActionButtons': userActionButtons
+                    },
+                    $inc:{
+                        totalOffers: 1
                     }
                 }
                 )
@@ -413,6 +416,9 @@ const addServiceProviserResponse = async (req, res) => {
                                         serviceProviderActionPrice: serviceProviderActionPrice,
                                     }],
                                 }]
+                        },
+                        $inc:{
+                            totalOffers: 1
                         }
                     })
                 res.status(200).json("Response sent")
