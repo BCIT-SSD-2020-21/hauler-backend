@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
+const s3url = require('./s3.js')
+
 
 require('dotenv').config();
 const app = express();
@@ -26,7 +28,10 @@ app.use('/api/users', userRoutes);
 const uri = process.env.MONGO_URI;
 
 mongoose
-    .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
     .then(() => {
         app.set("port", port);
         app.listen(port, () =>
@@ -36,3 +41,13 @@ mongoose
     .catch(err => {
         console.log(err)
     });
+
+
+//Applying S3 URL
+
+app.use(express.static('front'))
+
+app.get('/s3Url', async (req, res) => {
+    const url = await s3url.generateUploadURL()
+    res.send({url})
+})
