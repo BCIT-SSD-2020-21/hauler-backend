@@ -16,20 +16,27 @@ const createPost = async (req, res) => {
             price,
             totalOffers,
             status,
-            pickUpProvince,
+            pickUpAddress,
+            // pickUpProvince,
             pickUpCity,
-            pickUpStreetAddress,
-            pickUpZipCode,
+            // pickUpStreetAddress,
+            // pickUpZipCode,
+            pickUpAddressLat,
+            pickUpAddressLng,
             pickUpContactPerson,
             pickUpContactNumber,
             pickUpSpecialInstruction,
-            dropOffProvince,
+            // dropOffProvince,
+            dropOffAddress,
             dropOffCity,
-            dropOffStreetAddress,
-            dropOffZipCode,
+            // dropOffStreetAddress,
+            // dropOffZipCode,
+            dropOffAddressLat,
+            dropOffAddressLng,
             dropOffContactPerson,
             dropOffContactNumber,
-            dropOffSpecialInstructions,
+            dropOffSpecialInstruction,
+            distance,
             serviceProviderId,
             responseStatus,
             notificationOnServiceProvider,
@@ -55,20 +62,27 @@ const createPost = async (req, res) => {
             price,
             totalOffers,
             status,
-            pickUpProvince,
+            pickUpAddress,
+            // pickUpProvince,
             pickUpCity,
-            pickUpStreetAddress,
-            pickUpZipCode,
+            // pickUpStreetAddress,
+            // pickUpZipCode,
+            pickUpAddressLat,
+            pickUpAddressLng,
             pickUpContactPerson,
             pickUpContactNumber,
             pickUpSpecialInstruction,
-            dropOffProvince,
+            // dropOffProvince,
+            dropOffAddress,
             dropOffCity,
-            dropOffStreetAddress,
-            dropOffZipCode,
+            // dropOffStreetAddress,
+            // dropOffZipCode,
+            dropOffAddressLat,
+            dropOffAddressLng,
             dropOffContactPerson,
             dropOffContactNumber,
-            dropOffSpecialInstructions,
+            dropOffSpecialInstruction,
+            distance,
             response: [{
                 serviceProviderId,
                 responseStatus,
@@ -165,7 +179,7 @@ const updateOnePost = async (req, res) => {
         const id = req.params.postId;
         const {
             service,
-            PostHeading,
+            postHeading,
             postDescription,
             loadWeight,
             numberOfItems,
@@ -173,26 +187,31 @@ const updateOnePost = async (req, res) => {
             price,
             totalOffers,
             status,
-            pickUpProvince,
+            // pickUpProvince,
             pickUpCity,
-            pickUpStreetAddress,
-            pickUpZipCode,
+            // pickUpStreetAddress,
+            // pickUpZipCode,
+            pickUpAddressLat,
+            pickUpAddressLng,
             pickUpContactPerson,
             pickUpContactNumber,
             pickUpSpecialInstruction,
-            dropOffProvince,
+            // dropOffProvince,
             dropOffCity,
-            dropOffStreetAddress,
-            dropOffZipCode,
+            // dropOffStreetAddress,
+            // dropOffZipCode,
+            dropOffAddressLat,
+            dropOffAddressLng,
             dropOffContactPerson,
             dropOffContactNumber,
-            dropOffSpecialInstructions
+            dropOffSpecialInstruction,
+            distance
         } = req.body;
         await PostData.findOneAndUpdate({ _id: id },
             {
                 $set: {
                     service: service,
-                    PostHeading: PostHeading,
+                    postHeading: postHeading,
                     postDescription: postDescription,
                     loadWeight: loadWeight,
                     numberOfItems: numberOfItems,
@@ -200,20 +219,25 @@ const updateOnePost = async (req, res) => {
                     price: price,
                     totalOffers: totalOffers,
                     status: status,
-                    pickUpProvince: pickUpProvince,
+                    // pickUpProvince: pickUpProvince,
                     pickUpCity: pickUpCity,
-                    pickUpStreetAddress: pickUpStreetAddress,
-                    pickUpZipCode: pickUpZipCode,
+                    // pickUpStreetAddress: pickUpStreetAddress,
+                    // pickUpZipCode: pickUpZipCode,
+                    pickUpAddressLat: pickUpAddressLat,
+                    pickUpAddressLng: pickUpAddressLng,
                     pickUpContactPerson: pickUpContactPerson,
                     pickUpContactNumber: pickUpContactNumber,
                     pickUpSpecialInstruction: pickUpSpecialInstruction,
-                    dropOffProvince: dropOffProvince,
+                    // dropOffProvince: dropOffProvince,
                     dropOffCity: dropOffCity,
-                    dropOffStreetAddress: dropOffStreetAddress,
-                    dropOffZipCode: dropOffZipCode,
+                    // dropOffStreetAddress: dropOffStreetAddress,
+                    // dropOffZipCode: dropOffZipCode,
+                    dropOffAddressLat: dropOffAddressLat,
+                    dropOffAddressLng: dropOffAddressLng,
                     dropOffContactPerson: dropOffContactPerson,
                     dropOffContactNumber: dropOffContactNumber,
-                    dropOffSpecialInstructions: dropOffSpecialInstructions
+                    dropOffSpecialInstruction: dropOffSpecialInstruction,
+                    distance:distance
                 }
             });
         res.status(200).json('Post updated')
@@ -226,7 +250,7 @@ const updateOnePost = async (req, res) => {
 const updatePostVisibility = async (req, res) => {
     try {
         const id = req.params.postId;
-        const { 
+        const {
             price
         } = req.body;
         await PostData.findOneAndUpdate({ _id: id },
@@ -338,7 +362,6 @@ const addServiceProviserResponse = async (req, res) => {
 
     let activePost = await PostData.findOne({ _id: postId, status: 'Active' })
     if (!!activePost) {
-        console.log(activePost)
         let existedResponse = await PostData.aggregate([
             { $match: { _id: ObjectId(postId), } },
             { $unwind: "$response" },
@@ -363,6 +386,9 @@ const addServiceProviserResponse = async (req, res) => {
                         'response.$.notificationOnServiceProvider': 'none',
                         'response.$.notificationOnUser': 'flex',
                         'response.$.userActionButtons': userActionButtons
+                    },
+                    $inc:{
+                        totalOffers: 1
                     }
                 }
                 )
@@ -390,6 +416,9 @@ const addServiceProviserResponse = async (req, res) => {
                                         serviceProviderActionPrice: serviceProviderActionPrice,
                                     }],
                                 }]
+                        },
+                        $inc:{
+                            totalOffers: 1
                         }
                     })
                 res.status(200).json("Response sent")
@@ -496,4 +525,3 @@ exports.getPostsByServiceProviderAndService = getPostsByServiceProviderAndServic
 exports.getPostsByServiceProviderIdAndLocation = getPostsByServiceProviderIdAndLocation;
 exports.getAll = getAll;
 exports.deleteAll = deleteAll;
-

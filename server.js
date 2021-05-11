@@ -17,7 +17,7 @@ const userRoutes = require('./routes/user-router.js');
 //importing middleware
 app.use(bodyParser.json());
 app.use(cors());
-// app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 //defining restApi's
 app.use('/api/posts', postRoutes);

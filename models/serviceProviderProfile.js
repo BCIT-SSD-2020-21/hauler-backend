@@ -23,6 +23,7 @@ const serviceProviderProfileSchema = new Schema({
     lastName: { type: String, required: true },
     profilePicUrl: { type: String, required: true},
     dateOfBirth: { type: String, required: true },
+    stars: {type:Number,  required: true, default: 5},
     timeStamp: { type: Date, required: true, default: Date.now },
     province: { type: String, required: true },
     city: { type: String, required: true },
