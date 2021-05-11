@@ -4,7 +4,10 @@ The back-end of the hauler app handles the database for both the apps, user and 
 ## Installation requirements
 
 ### dependancies required to be installed
-- npm install mongoose, cors, express and body-parser
+* npm install mongoose, cors, express and body-parser
+* npm i aws-sdk
+* npm install dotenv
+
 
 ### Currently the database on MongoDb is hosted on their shared cluster plan (free).
 - A dot env file will have to be created at the root to store the below Url and add the databse cluster password.
