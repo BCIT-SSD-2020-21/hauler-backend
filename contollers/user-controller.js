@@ -58,7 +58,7 @@ const getUser = async (req, res) => {
 const getOneUser = async (req, res) => {
     try {
         const id = req.params.uid;
-        let user = await UserData.findOne({ _id: id });
+        let user = await UserData.findOne({ uid: id });
         res.status(200).json(user)
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -69,7 +69,7 @@ const getOneUser = async (req, res) => {
 const deleteOneUser = async (req, res) => {
     try {
         const id = req.params.uid;
-        await UserData.deleteOne({ _id: id });
+        await UserData.deleteOne({ uid: id });
         res.status(200).json("user deleted")
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -90,7 +90,7 @@ const updateOneUser = async (req, res) => {
             unitNumber,
             contactNumber
         } = req.body;
-        await UserData.findOneAndUpdate({ _id: id }, { $set: { firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, province: province, city: city, streetAddress: streetAddress, unitNumber: unitNumber, contactNumber: contactNumber } });
+        await UserData.findOneAndUpdate({uid: id }, { $set: { firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, province: province, city: city, streetAddress: streetAddress, unitNumber: unitNumber, contactNumber: contactNumber } });
         res.status(200).json("User Info updated")
     } catch (error) {
         res.status(404).json({ message: error.message });
