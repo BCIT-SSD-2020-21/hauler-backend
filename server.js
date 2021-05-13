@@ -7,7 +7,7 @@ const s3url = require('./s3.js')
 
 require('dotenv').config();
 const app = express();
-const port = 3000;
+const port = process.env.PORT ||"3000";
 
 //importing routes
 const postRoutes = require('./routes/post-routes.js');
