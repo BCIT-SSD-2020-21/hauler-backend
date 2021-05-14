@@ -166,8 +166,13 @@ const getPostsByIdAndService = async (req, res) => {
 const deleteOnePost = async (req, res) => {
     try {
         const id = req.params.postId;
+        let activePost = await PostData.findOne({ _id: id, status: 'Active' })
+        if (!!activePost) {
         await PostData.deleteOne({ _id: id });
-        res.status(200).json("post deleted")
+        res.status(200).json("Post deleted")
+        } else {
+            res.status(200).json("This post is already accepted. You cannot delete it!")
+        }
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -177,29 +182,25 @@ const deleteOnePost = async (req, res) => {
 const updateOnePost = async (req, res) => {
     try {
         const id = req.params.postId;
+        let activePost = await PostData.findOne({ _id: id, status: 'Active' })
+        if (!!activePost) {
         const {
-            service,
+            // service,
             postHeading,
             postDescription,
             loadWeight,
             numberOfItems,
-            imageUrl,
+            // imageUrl,
             price,
-            totalOffers,
-            status,
-            // pickUpProvince,
+            pickUpAddress,
             pickUpCity,
-            // pickUpStreetAddress,
-            // pickUpZipCode,
             pickUpAddressLat,
             pickUpAddressLng,
             pickUpContactPerson,
             pickUpContactNumber,
             pickUpSpecialInstruction,
-            // dropOffProvince,
+            dropOffAddress,
             dropOffCity,
-            // dropOffStreetAddress,
-            // dropOffZipCode,
             dropOffAddressLat,
             dropOffAddressLng,
             dropOffContactPerson,
@@ -210,28 +211,22 @@ const updateOnePost = async (req, res) => {
         await PostData.findOneAndUpdate({ _id: id },
             {
                 $set: {
-                    service: service,
+                    // service: service,
                     postHeading: postHeading,
                     postDescription: postDescription,
                     loadWeight: loadWeight,
                     numberOfItems: numberOfItems,
-                    imageUrl: imageUrl,
+                    // imageUrl: imageUrl,
                     price: price,
-                    totalOffers: totalOffers,
-                    status: status,
-                    // pickUpProvince: pickUpProvince,
+                    pickUpAddress: pickUpAddress,
                     pickUpCity: pickUpCity,
-                    // pickUpStreetAddress: pickUpStreetAddress,
-                    // pickUpZipCode: pickUpZipCode,
                     pickUpAddressLat: pickUpAddressLat,
                     pickUpAddressLng: pickUpAddressLng,
                     pickUpContactPerson: pickUpContactPerson,
                     pickUpContactNumber: pickUpContactNumber,
                     pickUpSpecialInstruction: pickUpSpecialInstruction,
-                    // dropOffProvince: dropOffProvince,
+                    dropOffAddress: dropOffAddress,
                     dropOffCity: dropOffCity,
-                    // dropOffStreetAddress: dropOffStreetAddress,
-                    // dropOffZipCode: dropOffZipCode,
                     dropOffAddressLat: dropOffAddressLat,
                     dropOffAddressLng: dropOffAddressLng,
                     dropOffContactPerson: dropOffContactPerson,
@@ -241,6 +236,9 @@ const updateOnePost = async (req, res) => {
                 }
             });
         res.status(200).json('Post updated')
+    } else {
+        res.status(200).json("This post is already accepted. You cannot edit it!")
+    }
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -251,14 +249,16 @@ const updatePostVisibility = async (req, res) => {
     try {
         const id = req.params.postId;
         const {
-            price
+            price,
+            serviceProviderId
         } = req.body;
         await PostData.findOneAndUpdate({ _id: id },
             {
                 $set: {
                     show: false,
                     status: "In Progress",
-                    acceptedPrice: price
+                    acceptedPrice: price,
+                    acceptedServiceProvider: serviceProviderId
                 }
             });
         res.status(200).json('Visibility updated')
