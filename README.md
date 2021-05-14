@@ -36,11 +36,19 @@ The back-end of the hauler app handles the database for both the apps, user and 
 ## EndPoints
 
 ### For User
-#### _/api/users_   to get all users
-#### _/api/users_   to create new user
-#### _/api/users/:uid_   to get one user by id
-#### _/api/users/:uid_   to delete user
-#### _/api/users/:uid_   to edit user profile
+#### To get all users: _/api/users_   
+#### To create new user: _/api/users_ 
+#### To get one user by id: _/api/users/:uid_ 
+#### To delete user: _/api/users/:uid_   
+#### To edit user profile: _/api/users/:uid_   
+
+### For Service Provider
+#### To get all service Provider: _/api/service-providers_
+#### To get one service Provider by id: _/api/service-providers/:uid_
+#### To create new service Provider: _/api/service-providers_
+#### To delete one service Provider: _/api/service-providers/:uid_
+#### To edit service Provider Profile: _/api/service-providers/:uid_
+
 
 
 
