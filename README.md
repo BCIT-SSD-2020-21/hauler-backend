@@ -32,6 +32,15 @@ The back-end of the hauler app handles the database for both the apps, user and 
     <li>Once the command is complete it will give you the https:// link, which will be your link to the backend app deployed.</li>
     <li>Now your backend app is completely deployed on Heroku.!!!!</li>
 
+---
+## EndPoints
+
+### For User
+#### _/api/users_   to get all users
+#### _/api/users_   to create new user
+#### _/api/users/:uid_   to get one user by id
+#### _/api/users/:uid_   to delete user
+#### _/api/users/:uid_   to edit user profile
 
 
 
