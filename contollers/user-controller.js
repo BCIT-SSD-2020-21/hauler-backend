@@ -15,6 +15,7 @@ const createUser = async (req, res) => {
             unitNumber,
             email,
             contactNumber,
+            cardHolderName,
             creditCardNumber,
             expiryDate,
             cvv 
@@ -32,6 +33,7 @@ const createUser = async (req, res) => {
             unitNumber,
             email,
             contactNumber,
+            cardHolderName,
             creditCardNumber,
             expiryDate,
             cvv
