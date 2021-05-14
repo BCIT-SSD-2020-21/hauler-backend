@@ -13,7 +13,7 @@ The back-end of the hauler app handles the database for both the apps, user and 
 - npm start or yarn start
 - add .env file to the root folder (Sample for .env file created in the repo for refernce)
 - A dot env file will have to be created at the root to store the below Url and add the databse cluster password.
-    MONGO_URI= mongodb+srv://hauler:<password>@clusterhauler.v3kve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+    MONGO_URI= mongodb+srv://hauler-bcit:<password>@cluster0.hczjo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 <hr />
 
@@ -32,34 +32,56 @@ The back-end of the hauler app handles the database for both the apps, user and 
 ### `POST`
 
  ##### `/api/`
- ##### `/api/:postId`
- ##### `/api/one/:postId`
+ ##### `/api/:postId` - create one post
+ ##### `/api/one/:postId` - 
 
 
 ### `POST`
 
- ##### `/api/response/service-provider`
- ##### `/api/response/user` 
+ ##### `/api/response/service-provider` - create one post by the service provider
+ ##### `/api/response/user` - create one response from the user
+
+ ### 'DELETE`
+
+  #### '/api/' - delete all posts
+  #### '/api/:postId'  - delete one post
+  #### '/api/response/:responseId' - delete one response
 
 <hr />
 
+## For filtering posts
+
+### `GET`
+
+ ##### `/api/user/:uid` - for all posts by user
+ ##### '/api/user/location/:uid/:location' - filtering post by user id and location
+ ##### '/api/user/service/:uid/:service' - filtering post by user id and services
+ 
+<hr />
+ 
+## For Service Provider
+
+### `GET`
+
+ #### '/api/serviceprovider/:serviceProviderId' - Get service provider by Id
+ #### '/api/serviceprovider/location/:serviceProviderId/:location' - Get service provider by location
+ #### '/api/serviceprovider/service/:serviceProviderId/:service' - Get service proivder by service
+ #### '/api/response/service-provider/:serviceProviderId/:postId' - Get response by service provider Id
 
 
-.delete ('/', postController.deleteAll)
-.delete('/:postId', postController.deleteOnePost);
-.delete('/response/:responseId', postController.deleteResponse) 
+#### '/api/' - Get all 
 
-.get('/user/:uid', postController.getPostsByUid)
-.get('/user/location/:uid/:location', postController.getPostsByIdAndLocation)
-.get('/user/service/:uid/:service', postController.getPostsByIdAndService)
-
-.get('/serviceprovider/:serviceProviderId', postController.getPostsByServiceProviderId)
-.get('/serviceprovider/location/:serviceProviderId/:location', postController.getPostsByServiceProviderIdAndLocation)
-.get('/serviceprovider/service/:serviceProviderId/:service', postController.getPostsByServiceProviderAndService)
-.get('/response/service-provider/:serviceProviderId/:postId', postController.getResponseByServiseProviderId)
+router.get('/', serviceProviderController.getServiceProvider);
+router.get('/:uid', serviceProviderController.getOneServiceProvider);
+router.post('/', serviceProviderController.createServiceProvider);
+router.delete('/:uid', serviceProviderController.deleteOneServiceProvider);
+router.post('/:uid', serviceProviderController.updateOneServiceProvider)
 
 
-## Team Members
+
+
+
+## An industry project by:
 
 #### Kulveer Brar
 #### Abhishek Pundir
