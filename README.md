@@ -36,18 +36,90 @@ The back-end of the hauler app handles the database for both the apps, user and 
 ## EndPoints
 
 ### For User
-#### To get all users: _/api/users_   
-#### To create new user: _/api/users_ 
-#### To get one user by id: _/api/users/:uid_ 
-#### To delete user: _/api/users/:uid_   
-#### To edit user profile: _/api/users/:uid_   
+#### To get all users: 
+_/api/users_   
+#### To create new user: 
+_/api/users_ 
+#### To get one user by id: 
+_/api/users/:uid_ 
+#### To delete user: 
+_/api/users/:uid_   
+#### To edit user profile: 
+_/api/users/:uid_   
 
 ### For Service Provider
-#### To get all service Provider: _/api/service-providers_
-#### To get one service Provider by id: _/api/service-providers/:uid_
-#### To create new service Provider: _/api/service-providers_
-#### To delete one service Provider: _/api/service-providers/:uid_
-#### To edit service Provider Profile: _/api/service-providers/:uid_
+#### To get all service Provider: 
+_/api/service-providers_
+#### To get one service Provider by id:
+ _/api/service-providers/:uid_
+#### To create new service Provider: 
+_/api/service-providers_
+#### To delete one service Provider: 
+_/api/service-providers/:uid_
+#### To edit service Provider Profile: 
+_/api/service-providers/:uid_
+
+### For Posts
+#### To get all posts:
+_/api/posts_
+
+#### To get all posts:
+_/api/posts_
+
+#### To get all active posts:
+_/api/posts/all_
+
+#### To get active posts for specific location:
+_/api/posts/location/:location_
+
+#### To get active posts for specific service:
+_/api/posts/service/:service_
+
+#### To get one post by id:
+_/api/posts/one/:postId_
+
+#### To get all posts posted by specific user: 
+_/api/posts/user/:uid_
+
+#### To get all post by specific user and specific location:
+_/api/posts/user/location/:uid/:location_
+
+#### To get all post by specific user and specific service:
+_/api/posts/user/service/:uid/:service_
+
+#### To get all posts service provider responded to:
+_/api/posts/serviceprovider/:serviceProviderId_
+
+#### To get all posts service provider responded to for specific location:
+_/api/posts/serviceprovider/location/:serviceProviderId/:location_
+
+#### To get all posts service provider responded to for specific service:
+_/api/posts/serviceprovider/service/:serviceProviderId/:service_
+
+#### To create new Post:
+_/api/posts_
+
+#### To delete one post:
+_/api/posts/:postId_
+
+#### To edit post:
+_/api/posts/:postId_
+
+#### To update post visiblity when post gets accepted:
+_/api/posts/one/:postId_
+
+#### To add service provider response:
+_/api/posts/response/service-provider_
+
+#### To add user response:
+_/api/posts/response/user_
+
+#### To get response by service provider id on specific post:
+_/api/posts/response/service-provider/:serviceProviderId/:postId_
+
+#### To delete response:
+_/api/posts/response/:responseId_
+
 
 
 
