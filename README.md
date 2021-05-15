@@ -63,9 +63,6 @@ _/api/service-providers/:uid_
 #### To get all posts:
 _/api/posts_
 
-#### To get all posts:
-_/api/posts_
-
 #### To get all active posts:
 _/api/posts/all_
 
